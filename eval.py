@@ -57,6 +57,11 @@ import base64
 import io
 
 def image_to_data_url(image):
+    # Resize if too large to avoid OOM and slow inference
+    max_size = 1024
+    if max(image.size) > max_size:
+        image.thumbnail((max_size, max_size))
+        
     buffered = io.BytesIO()
     image.save(buffered, format="JPEG")
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
@@ -70,7 +75,7 @@ def main():
         model=args.model_path, 
         tensor_parallel_size=args.tensor_parallel_size,
         trust_remote_code=True,
-        max_model_len=8192,
+        max_model_len=16384,  # Balanced setting
         limit_mm_per_prompt={"image": 4} 
     )
     
