@@ -63,6 +63,7 @@ def main():
     # Prepare inputs
     inputs = []
     ground_truths = []
+    idxs = []
     
     for item in dataset:
         image_url = image_to_data_url(item['image'])
@@ -82,6 +83,7 @@ def main():
         
         inputs.append(messages)
         ground_truths.append(item['correct_answer'])
+        idxs.append(item.get('idx', len(idxs)))
 
     sampling_params = SamplingParams(
         temperature=0.0,
@@ -110,7 +112,7 @@ def main():
             correct_count += 1
             
         results.append({
-            "idx": item.get('idx', i),
+            "idx": idxs[i],
             "generated_text": generated_text,
             "pred_choice": pred_choice,
             "gt_choice": gt,
