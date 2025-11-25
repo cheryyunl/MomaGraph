@@ -51,7 +51,7 @@ def main():
         model=args.model_path, 
         tensor_parallel_size=args.tensor_parallel_size,
         trust_remote_code=True,
-        max_model_len=16384, # 16k context
+        max_model_len=16384, 
         limit_mm_per_prompt={"image": 4} 
     )
     
